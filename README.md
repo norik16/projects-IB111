@@ -117,6 +117,48 @@ Na začátku programu, u nultého zanoření definuji:
 - výchozí barvu
 - výchozí natočení
 
+###### Vlastní, nikým neinspirované fraktály:
+
+![](pictures/uhelniky3.png)
+
+<div style="page-break-after: always;"></div>
+
+###### Zajímavá animace:
+https://github.com/norik16/projects-IB111/blob/master/recursive-shapes-maker/pentagon/giphy.gif
+(Otázka zní, jak rychle by, čistě teoreticky, takovýto objekt "jel" po nějakém povrchu. Úhlová rychlost a asi i točivý moment jsou nekonečně velké, ale plocha kontaktu s podložkou by byla nekonečně malá.)
+
+###### Sierpińského trojúhelník
+![](pictures/sier.png)
+
+
+<div style="page-break-after: always;"></div>
+
+##### Krajinky
+
+Prvotní myšlenka byla dělatkrajiny hloubením jam náhodným "střílením" do rové plochy. Chtěl jsem ale střílet hodně, tak jsem si uvědomil, že na zaznačení Area of effect nějakého výbuchu si mi stačí poznačit pouze změny sklonu okolo kráteru a až budu mít všechny změny nasčítané, můžu ve dvou průchodech spočítat výšku půdy v daném místě.
+
+Tímto způsobem nebude doba "vygenerování" jedné bomby kvadratická vůdči šířce mapy, ale pouze lineární, protože do každé "řady" mi stačí zapsat maximálně 4 informace o změně sklonu. Díky tomu můžu generovat statisíce "bomb" během pár vteřin, takže pravděpodobnost dokonce schová fakt, že jsou "výbuchy" bomb čtvercové.
+
+Po naprogramování jsem si řekl, že výsledné výškové mapy vypadají příliš neuměle, abych z nich místo kráterů neudělal krajinky.
+
+Následovala funkce na vytvoření barvy příslušící dané nadmořské výšce a bylo hotovo.
+
+###### Postupný vývoj od papíru k ostrovu (samotné generování "bomb" nezměněno, kromě posledního vždy vytvořeno 100 000 kráterů)
+
+![](pictures/atoms2.jpg)
+
+![](pictures/atoms.jpg)
+
+![](pictures/atomsColors.jpg)
+
+![](pictures/really nice.jpg)
+
+![](pictures/atomsAwesome.jpg)
+
+A nakonec 1 000 000 "bomb":
+
+![](pictures/atomsMilionColor.jpg)
+
 
 
 

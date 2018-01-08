@@ -52,8 +52,8 @@ def calculate_v_map(land_map, size_x, size_y):
     :param size_y:
     :return:
     """
-    for y in range(size_y):
-        for x in range(1, size_x):
+    for y in range(size_x):
+        for x in range(1, size_y):
             land_map['v'][x][y] = land_map['v'][x - 1][y] + \
                                   land_map['a'][x - 1][y]
 
@@ -69,8 +69,8 @@ def calculate_s_map(land_map, size_x, size_y):
     :param size_y:
     :return:
     """
-    for y in range(size_y):
-        for x in range(1, size_x):
+    for y in range(size_x):
+        for x in range(1, size_y):
             land_map['s'][x][y] = land_map['s'][x - 1][y] + \
                                   land_map['v'][x - 1][y]
 
@@ -90,7 +90,7 @@ def rain_craters(land_map, size_x, size_y, amount):
     for k in range(amount):
         radius = min(random.randint(2, min(size_x, size_y) // 5),
                      random.randint(2, min(size_x, size_y) // 13))
-        center = random_point(size_x, size_y, radius)
+        center = random_point(size_y, size_x, radius)
         land_map = make_crater(land_map, center, radius)
 
     return land_map
@@ -112,15 +112,15 @@ def get_color(height):
     """
 
     color = (0, 0, 0)
-    delimeters = [120, 145]
-    if height in [160, 175, 190, 205, 220]:
+    delimeters = [170, 180]
+    if height in [190, 205, 220]:
         color = (0, 0, 0)
 
     elif height > delimeters[1]:
         ch = ((height - delimeters[1]) / (255 - delimeters[1]))
-        color = (270 * ch,
+        color = (260 * ch,
                  210 + 80 * ch,
-                 -220 + 510 * ch)
+                 -240 + 510 * ch)
 
     elif height < delimeters[1] and height > delimeters[0]:
         color = (
@@ -136,6 +136,28 @@ def get_color(height):
     r, g, b = color
     return int(r), int(g), int(b)
 
+def print_map(land_map):
+
+    print('\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n')
+    for layer in land_map['a']:
+        s = ''
+        for o in layer:
+            s += str(o) + '\t'
+        print(s)
+
+    print('\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n')
+    for layer in land_map['v']:
+        s = ''
+        for o in layer:
+            s += str(o) + '\t'
+        print(s)
+
+    print('\nssssssssssssssssssssssssssssssssssssssssssss\n')
+    for layer in land_map['s']:
+        s = ''
+        for o in layer:
+            s += str(o) + '\t'
+        print(s)
 
 def make_a_bitmap(name, size_x, size_y):
     """
@@ -147,8 +169,8 @@ def make_a_bitmap(name, size_x, size_y):
     """
     land_map = create_map(size_x, size_y)
 
-    land_map = rain_craters(land_map, size_x, size_y, 10000)
-    #
+    land_map = rain_craters(land_map, size_x, size_y, 100000)
+
     land_map = calculate_v_map(land_map, size_x, size_y)
     calculate_s_map(land_map, size_x, size_y)
 
@@ -156,44 +178,21 @@ def make_a_bitmap(name, size_x, size_y):
     pixels = []  # create the pixel map
 
     mx = 0
-    for x in range(size_x):
-        for y in range(size_y):
-            # if mx < land_map['s'][x][y]:
-            #     print(mx)
+    for x in range(size_y):
+        for y in range(size_x):
             mx = max(mx, land_map['s'][x][y])
 
     mx = mx / 255
 
-    for x in range(size_x):
-        for y in range(size_y):
+    for x in range(size_y):
+        for y in range(size_x):
             color = get_color(land_map['s'][x][y] // mx)
-            # print(color)
             pixels.append(color)
-            # (int(land_map['s'][x][y] // mx),
-            #            int(land_map['s'][x][y] // mx),
-            #            int(land_map['s'][x][y] // mx)))
-    img.putdata(pixels)
 
-    # print('\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n')
-    # for layer in land_map['a']:
-    #     s = ''
-    #     for o in layer:
-    #         s += str(o) + '\t'
-    #     print(s)
-    #
-    # print('\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n')
-    #
-    # for layer in land_map['s']:
-    #     s = ''
-    #     for o in layer:
-    #         s += str(o) + '\t'
-    #     print(s)
+    img.putdata(pixels)
 
     img.show()
     img.save(name + ".jpg")
-    #
-    # for c in [10, 50, 100, 150, 200]:
-    #     print(c, get_color(c))
 
 
-make_a_bitmap("small", 1000, 1000)
+make_a_bitmap("terrain", 820*2, 312*2)
