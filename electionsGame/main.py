@@ -127,8 +127,6 @@ class Smart(Party):
         self.plunder -= 0.1
         if self.plunder < 0:
             self.plunder = 0
-        # if self.rounds_nip > random.randint(3, 5):
-        #     self.karma = 1
 
         super().not_in_parliament()
 
@@ -227,7 +225,7 @@ def run_the_state(parties, number_of_elections, results):
         votes[party.get_name()] = 0
 
     for it in range(number_of_elections):
-        if it % (number_of_elections/10) == -1:
+        if it == number_of_elections - 1:
             print('\nIteration ' + str(it))
             for party in parties:
                 # if party.get_name() == 'ODS':
@@ -306,7 +304,7 @@ def output(lengths, parties):
         plt.plot([i for i in lengths],
                  results[party.get_name()], party.get_color())
 
-    plt.axis([0, max(lengths), 0, 100])
+    plt.axis([0, max(lengths), 0, 1.1 * max([max(results[x]) for x in results])])
     plt.show()
 
 
@@ -369,8 +367,8 @@ parties0 = [
 
 
 
-lengths = [x for x in range(2, 300)]  # timeperiods to test
+lengths = [x for x in range(2, 600)]  # timeperiods to test
 
-output(lengths, parties0)
+output(lengths, parties6)
 
 # runTheState(parties1, number_of_years)
