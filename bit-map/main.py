@@ -1,7 +1,5 @@
 from PIL import Image
 import random
-from collections import deque
-import math
 import copy
 
 
@@ -98,7 +96,6 @@ def rain_craters(land_map, size_x, size_y, amount):
 
 def create_map(size_x, size_y):
     sub_map = [[0 for x in range(size_x)] for y in range(size_y)]
-    # print(sub_map)
 
     return {'s': copy.deepcopy(sub_map), 'v': copy.deepcopy(sub_map),
             'a': copy.deepcopy(sub_map)}
@@ -137,6 +134,11 @@ def get_color(height):
     return int(r), int(g), int(b)
 
 def print_map(land_map):
+    """
+        Print for debugging or explaining the solution
+    :param land_map:
+    :return:
+    """
 
     print('\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n')
     for layer in land_map['a']:
@@ -174,8 +176,8 @@ def make_a_bitmap(name, size_x, size_y):
     land_map = calculate_v_map(land_map, size_x, size_y)
     calculate_s_map(land_map, size_x, size_y)
 
-    img = Image.new('RGB', (size_x, size_y), "black")  # create a black image
-    pixels = []  # create the pixel map
+    img = Image.new('RGB', (size_x, size_y), "black")   # create a black image
+    pixels = []                                         # create the pixel map
 
     mx = 0
     for x in range(size_y):
