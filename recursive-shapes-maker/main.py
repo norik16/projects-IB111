@@ -1,16 +1,19 @@
 import svgwrite
 import math
 
-dwg = svgwrite.Drawing(filename='traditional3.svg')
+dwg = svgwrite.Drawing(filename='sierpenskiho.svg')
 dwg.viewbox(width=1000, height=1000)
 
-init_edges = 4
-next_rotation = 0
-next_size = 0.40
-max_iter = 7
+init_edges = 3
+next_rotation = 180
+next_size = 0.5
+max_iter = 5
 next_color = -int(510 / max_iter)
 # next_spacing = math.sqrt(3)/3
-next_spacing = 0.465
+next_spacing = 1.5
+
+
+# next_spacing = 1.825
 
 
 def rotate(origin, point, angle):
@@ -42,7 +45,8 @@ def drawRect(center: (int, int), size: float, rotation: int, color: int):
     rect = dwg.rect((x - size / 2, y - size / 2), (size, size), 0, 0,
                     # fill='none',
                     # stroke='rgb(' + str(min(255, color)) + ', ' + str(min(255, 510 - color)) + ', 0)',
-                    fill='rgb(' + str(min(255, color)) + ', ' + str(min(255, 510 - color)) + ', 0)',
+                    fill='rgb(' + str(min(255, color)) + ', ' + str(
+                        min(255, 510 - color)) + ', 0)',
                     stroke='none',
                     stroke_width=size / 25)
     rect.rotate(rotation, center)
@@ -59,7 +63,8 @@ def drawRect(center: (int, int), size: float, rotation: int, color: int):
              size * next_size, rotation + next_rotation, color + next_color)
 
 
-def drawPolygon(number_of_edges: int, center: (int, int), size: float, rotation: int, color: int, iter: int):
+def drawPolygon(number_of_edges: int, center: (int, int), size: float,
+                rotation: int, color: int, iter: int):
     if iter > max_iter:
         return
 
@@ -77,19 +82,22 @@ def drawPolygon(number_of_edges: int, center: (int, int), size: float, rotation:
 
     polygon = dwg.polygon(points,
                           fill='none',
-                          stroke='rgb(' + str(min(255, color)) + ', ' + str(min(255, 510 - color)) + ', 0)',
+                          stroke='rgb(' + str(min(255, color)) + ', ' + str(
+                              min(255, 510 - color)) + ', 0)',
                           # fill='rgb(' + str(min(255, color)) + ', ' + str(min(255, 510 - color)) + ', 0)',
                           # stroke='none',
-                          stroke_width=math.sqrt(size)/15
+                          stroke_width=math.sqrt(size) / 1
                           )
 
     for i in range(number_of_edges):
         points[i] = translate(center, points[i], next_spacing)
 
     for point in points:
-        drawPolygon(number_of_edges, point, size * next_size, rotation + next_rotation, color + next_color, iter + 1)
+        drawPolygon(number_of_edges, point, size * next_size,
+                    rotation + next_rotation, color + next_color, iter + 1)
 
     dwg.add(polygon)
+
 
 # drawRect((500, 500), 400, 30, 230)
 drawPolygon(init_edges, (500, 500), 400, 45, 510, 0)

@@ -4,7 +4,7 @@
 from html.parser import HTMLParser
 import time
 import locale
-import emoji
+# import emoji
 import operator
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,9 +15,6 @@ fb_home = '../../2/facebook-ronaldluc'
 me = 'Ronald Luc'
 
 sm_minimum = 100
-
-
-# plt.rc('font', family='Arial')
 
 
 class ConversationListHTMLParser(HTMLParser):
@@ -44,7 +41,6 @@ class ConversationListHTMLParser(HTMLParser):
     def handle_data(self, data):
         print('\t' * self.__indent, data)
 
-        # if self.__to_set[0] == 'conversation' and self.__to_set[1] is not None and data == 'Markéta Doležalová':
         if self.__to_set[0] == 'conversation' and self.__to_set[1] is not None:
             conversation = open(fb_home + '/' + self.__to_set[1])
             messages_parser.rst()
@@ -52,8 +48,9 @@ class ConversationListHTMLParser(HTMLParser):
             for m_line in conversation:
                 messages_parser.feed(m_line)
 
-            self.__conversations.append({'users': [user.strip() for user in data.split(',')],
-                                         'messages': messages_parser.get_messages()})
+            self.__conversations.append(
+                {'users': [user.strip() for user in data.split(',')],
+                 'messages': messages_parser.get_messages()})
 
             conversation.close()
 
@@ -94,7 +91,8 @@ class MessagesHTMLParser(HTMLParser):
         # print('\t' * self.__indent, data)
 
         if self.__to_set == 'datetime':
-            self.__messages[-1][self.__to_set] = time.strptime(data + '00', '%d. %B %Y v %H:%M %Z%z')
+            self.__messages[-1][self.__to_set] = \
+                time.strptime(data + '00', '%d. %B %Y v %H:%M %Z%z')
         elif self.__to_set in ['name', 'text']:
             self.__messages[-1][self.__to_set] = data
 
@@ -111,15 +109,15 @@ class MessagesHTMLParser(HTMLParser):
         pass
 
 
-smiley_regex = re.compile(r'( |^)((?!(http:/|https:/))([3]?[>:;=][-oO]?[)(\[\]DPpd{}*oO/])|(\^_?\^))')
+smiley_regex = re.compile(r'( |^)((?!(http:/|https:/))'
+                          r'([3]?[>:;=][-oO]?[)(\[\]DPpd{}*oO/])|(\^_?\^))')
 
 
-# smiley_regex = re.compile(r'( |^)(([3]?[>:;=][-oO]?[)(\[\]DPpd{}/])|(\^_?\^))')
 
 
 def extract_smiles(str):
     smiles = [a[1] for a in smiley_regex.findall(str)]  # classic smiles
-    smiles += ''.join(c for c in str if c in emoji.UNICODE_EMOJI)  # emojis
+    # smiles += ''.join(c for c in str if c in emoji.UNICODE_EMOJI)  # emojis
 
     return smiles
 
@@ -155,14 +153,16 @@ def smiley_stats():
 
     to_show = [[], [], [], []]
 
-    for x in reversed(sorted(my_dictionary.items(), key=operator.itemgetter(1))):
+    for x in reversed(sorted(my_dictionary.items(),
+                             key=operator.itemgetter(1))):
         if x[1] >= sm_minimum:
             if x[0] in others_dictionary:
                 to_show[0].append((x[0], x[1], others_dictionary[x[0]]))
             else:
                 to_show[0].append((x[0], x[1], 0))
 
-    for x in reversed(sorted(others_dictionary.items(), key=operator.itemgetter(1))):
+    for x in reversed(sorted(others_dictionary.items(),
+                             key=operator.itemgetter(1))):
         if x[1] >= sm_minimum:
             if x[0] not in to_show:
                 if x[0] in my_dictionary:
@@ -170,18 +170,23 @@ def smiley_stats():
                 else:
                     to_show[1].append((x[0], 0, x[1]))
 
-    for x in reversed(sorted(my_dictionary.items(), key=operator.itemgetter(1))):
+    for x in reversed(sorted(my_dictionary.items(),
+                             key=operator.itemgetter(1))):
         if x[1] >= sm_minimum:
             if x[0] in others_dictionary:
-                to_show[2].append((x[0], x[1] / my_count * 100, others_dictionary[x[0]] / others_count * 100))
+                to_show[2].append((x[0], x[1] / my_count * 100,
+                                   others_dictionary[x[0]]
+                                   / others_count * 100))
             else:
                 to_show[2].append((x[0], x[1] / my_count * 100, 0))
 
-    for x in reversed(sorted(others_dictionary.items(), key=operator.itemgetter(1))):
+    for x in reversed(sorted(others_dictionary.items(),
+                             key=operator.itemgetter(1))):
         if x[1] >= sm_minimum:
             if x[0] not in to_show:
                 if x[0] in my_dictionary:
-                    to_show[3].append((x[0], my_dictionary[x[0]] / my_count * 100, x[1] / others_count * 100))
+                    to_show[3].append((x[0], my_dictionary[x[0]] / my_count
+                                       * 100, x[1] / others_count * 100))
                 else:
                     to_show[3].append((x[0], 0, x[1] / others_count * 100))
 
@@ -286,8 +291,8 @@ def who_starts_hours():
             if len(conversation['users']) <= 2:
                 last_msg = conversation['messages'][-1]
                 for message in reversed(conversation['messages']):
-                    if time.mktime(message['datetime']) - time.mktime(last_msg['datetime']) > time_off:
-                        # print('Da', time.mktime(message['datetime']) - time.mktime(last_msg['datetime']))
+                    if time.mktime(message['datetime']) \
+                            - time.mktime(last_msg['datetime']) > time_off:
                         if message['name'] == me:
                             my_starts[-1] += 1
                         else:
@@ -305,10 +310,14 @@ def who_starts_hours():
 
     a = [None for x in range(4)]
 
-    a[1], = ax.plot([i / 60 / 60 for i in new_conv_limit], my_starts, color='r', label='Já začátek k.')
-    a[0], = ax.plot([i / 60 / 60 for i in new_conv_limit], others_starts, color='y', label='Ostatní začátek k.')
-    a[3], = ax.plot([i / 60 / 60 for i in new_conv_limit], my_ends, color='r', label='Já konec k.')
-    a[2], = ax.plot([i / 60 / 60 for i in new_conv_limit], others_ends, color='y', label='Ostatní konec k.')
+    a[1], = ax.plot([i / 60 / 60 for i in new_conv_limit], my_starts,
+                    color='r', label='Já začátek k.')
+    a[0], = ax.plot([i / 60 / 60 for i in new_conv_limit], others_starts,
+                    color='y', label='Ostatní začátek k.')
+    a[3], = ax.plot([i / 60 / 60 for i in new_conv_limit], my_ends,
+                    color='r', label='Já konec k.')
+    a[2], = ax.plot([i / 60 / 60 for i in new_conv_limit], others_ends,
+                    color='y', label='Ostatní konec k.')
 
     a[2].set_dashes(dashes)
     a[3].set_dashes(dashes)
@@ -329,10 +338,14 @@ def who_starts_hours():
 
     a = [None for x in range(4)]
 
-    a[1], = ax.plot([i / 60 / 60 for i in new_conv_limit], my_starts, color='r', label='Já začátek k.')
-    a[0], = ax.plot([i / 60 / 60 for i in new_conv_limit], others_starts, color='y', label='Ostatní začátek k.')
-    a[3], = ax.plot([i / 60 / 60 for i in new_conv_limit], my_ends, color='r', label='Já konec k.')
-    a[2], = ax.plot([i / 60 / 60 for i in new_conv_limit], others_ends, color='y', label='Ostatní konec k.')
+    a[1], = ax.plot([i / 60 / 60 for i in new_conv_limit], my_starts,
+                    color='r', label='Já začátek k.')
+    a[0], = ax.plot([i / 60 / 60 for i in new_conv_limit], others_starts,
+                    color='y', label='Ostatní začátek k.')
+    a[3], = ax.plot([i / 60 / 60 for i in new_conv_limit], my_ends,
+                    color='r', label='Já konec k.')
+    a[2], = ax.plot([i / 60 / 60 for i in new_conv_limit], others_ends,
+                    color='y', label='Ostatní konec k.')
 
     a[2].set_dashes(dashes)
     a[3].set_dashes(dashes)
@@ -344,7 +357,8 @@ def who_starts_hours():
 
 
 def who_starts_days():
-    new_conv_limit = [x * 60 * 60 * 24 for x in [1, 2, 3, 4, 5, 6, 7, 14, 21, 28, 7*5, 7*6, 7*7, 7*8]]
+    new_conv_limit = [x * 60 * 60 * 24 for x in [1, 2, 3, 4, 5, 6, 7, 14, 21,
+                                                 28, 7*5, 7*6, 7*7, 7*8]]
 
     others_starts = []
     my_starts = []
@@ -363,8 +377,8 @@ def who_starts_days():
             if len(conversation['users']) <= 2:
                 last_msg = conversation['messages'][-1]
                 for message in reversed(conversation['messages']):
-                    if time.mktime(message['datetime']) - time.mktime(last_msg['datetime']) > time_off:
-                        # print('Da', time.mktime(message['datetime']) - time.mktime(last_msg['datetime']))
+                    if time.mktime(message['datetime']) \
+                            - time.mktime(last_msg['datetime']) > time_off:
                         if message['name'] == me:
                             my_starts[-1] += 1
                         else:
@@ -382,10 +396,14 @@ def who_starts_days():
 
     a = [None for x in range(4)]
 
-    a[1], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], my_starts, color='r', label='Já začátek k.')
-    a[0], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], others_starts, color='y', label='Ostatní začátek k.')
-    a[3], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], my_ends, color='r', label='Já konec k.')
-    a[2], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], others_ends, color='y', label='Ostatní konec k.')
+    a[1], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], my_starts,
+                    color='r', label='Já začátek k.')
+    a[0], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], others_starts,
+                    color='y', label='Ostatní začátek k.')
+    a[3], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], my_ends,
+                    color='r', label='Já konec k.')
+    a[2], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], others_ends,
+                    color='y', label='Ostatní konec k.')
 
     a[2].set_dashes(dashes)
     a[3].set_dashes(dashes)
@@ -406,10 +424,14 @@ def who_starts_days():
 
     a = [None for x in range(4)]
 
-    a[1], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], my_starts, color='r', label='Já začátek k.')
-    a[0], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], others_starts, color='y', label='Ostatní začátek k.')
-    a[3], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], my_ends, color='r', label='Já konec k.')
-    a[2], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], others_ends, color='y', label='Ostatní konec k.')
+    a[1], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], my_starts,
+                    color='r', label='Já začátek k.')
+    a[0], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], others_starts,
+                    color='y', label='Ostatní začátek k.')
+    a[3], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], my_ends,
+                    color='r', label='Já konec k.')
+    a[2], = ax.plot([i / 60 / 60 / 24 for i in new_conv_limit], others_ends,
+                    color='y', label='Ostatní konec k.')
 
     a[2].set_dashes(dashes)
     a[3].set_dashes(dashes)
@@ -428,6 +450,7 @@ messages_parser = MessagesHTMLParser()
 for line in m_list:
     c_list_parser.feed(line)
 
+# Different statistics
 # smiley_stats()
 # char_count()
 # messages_count()
@@ -435,6 +458,3 @@ for line in m_list:
 # who_starts_hours()
 who_starts_days()
 
-# print(extract_smiles('>D :D 😀'))
-
-# print(parser.get_messages())

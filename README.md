@@ -96,11 +96,26 @@ Bylo je potřeba konkretizovat tak, aby byly číselně popsatelné:
 
 <div style="page-break-after: always;"></div>
 
-###Grafika
+### Grafika
 
 ##### Fraktály
 
+Začal jsem s plánem udělat na vrcholech centrované čtverce (```drawRect```). Po rozmyšlení programu jsem se ale rozhodl udělat program na fraktály co nejuniverzálnější tak, abych s ním mohl vygenerovat svoje vlastní i "klasické známé" fraktály jen změnou konstant.
 
+Každé další zanoření tedy vůdči předchůdci definuji definuji pomocí:
+
+- rotace
+- translace -- vzdálenost od středu
+- úprava velikosti
+- změna barvy
+- změna tloušťky hran
+
+Na začátku programu, u nultého zanoření definuji:
+
+- počet hran
+- velikost
+- výchozí barvu
+- výchozí natočení
 
 
 
