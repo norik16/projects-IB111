@@ -5,7 +5,8 @@
 Všecheny zdrojové kódy jsou k dispozici na https://github.com/norik16/projects-IB111
 
 <div style="page-break-after: always;"></div>
-###Strategická hra
+
+### Strategická hra
 
 Vzhledem k výběru projektu v období voleb do PS jsem si jako hru vybral právě vládnutí PS.
 
@@ -32,6 +33,7 @@ Cílem je vydělat co nejvíce peněz v průměru za volební období. Peníze s
 - Podobná jak SmartLinear, ale kromě drancování upravuje i to, jak moc si věří. Pokud se dostane do PS, zvýší se jí ```selfesteem```, jinak sníží
 
 <div style="page-break-after: always;"></div>
+
 ##### Vyhodnocování
 
 Aby bylo vidět, jak jednotlivé strategie reagují na počet období, v kterých budou pracovat -- tzn. snažíme se zjistit hladovost jednotlivých strategií. Pro každou délku hry je celá samostatná simulace, protože chci aby byl program připraven na složitější strategie počítající s počtem volebních období do převratu (konce hry).
@@ -41,6 +43,7 @@ Aby bylo vidět, jak jednotlivé strategie reagují na počet období, v kterýc
 Dlouhodobě nejvýhodnější strategie je upravování jak míry drancování, tak velikosti volebních slibů (```selfesteem```) podle výsledků posledních voleb. Hra je naprogramována co nejvíce obecně, takže umožňuje vymyslet (spočetně) mnoho různých strategií pomocí volitelných proměnných. Níže uvedený příklad je jen základní, výchozí nastavení těchto strategií.
 
 <div style="page-break-after: always;"></div>
+
 - **modrá** -- Smart -- spočátku silná, ale nepřestane drásat, dokud nepřijde o karmu
 - **černá** -- SmartBinary -- po 2. vrcholu se jí začnou střídat kola s velkým a 0 ziskem
 - **oranžová** -- SmartLinear -- v každém kole si drží malý počet voličů, nevzpomatuje se
@@ -56,6 +59,7 @@ Několik dalších zajímavých partií je připraveno ke spuštění v samotné
 
 
 <div style="page-break-after: always;"></div>
+
 ###Zpracování dat
 
 Vybral jsem si projekt jehož výsledky mě opravdu zajímají, a to zpracování mých dat z Facebooku.
@@ -72,6 +76,7 @@ Bylo je potřeba konkretizovat tak, aby byly číselně popsatelné:
 3. Používám jiné smajlíky než ostatní?
 
 <div style="page-break-after: always;"></div>
+
 ##### 1. Začánám konverzace častěji než ostatní?
 - Ano, i při různé době mezi zprávami pro započetí nové konverzace se drží trend 3:2
 ![](pictures/starEndRelativeDays.png)
@@ -82,6 +87,7 @@ Bylo je potřeba konkretizovat tak, aby byly číselně popsatelné:
 ![](pictures/fb3.png)
 
 <div style="page-break-after: always;"></div>
+
 ##### 3. Používám jiné smajlíky než ostatní?
 - Nepoužívám vůbec smajlíky s nosem, ale při sečtení "stejných" smajlíků nezávisle na nosu se vychyluji jen v nepoužívání nejklasičtějšího ":)" smajlíka, naopak mnohokrát více používám ";)" a ":P" smajlíky.
 
@@ -89,6 +95,7 @@ Bylo je potřeba konkretizovat tak, aby byly číselně popsatelné:
 
 
 <div style="page-break-after: always;"></div>
+
 ###Grafika
 
 ##### Fraktály
